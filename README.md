@@ -2,15 +2,15 @@
 
 RaBobster OS build notes, Rabbit R1 integration files, visual assets, and verified screenshots for the Splat-I Rabbit R1 baseline.
 
-This repository is meant to be usable by a broad audience, including students, first-time Android tinkerers, automation builders, and experienced developers. You do not need to already be an Android ROM expert to understand what is here. The short version is this:
+This repository is meant to be usable by a broad audience, including students, first-time Android tinkerers, automation builders, and experienced developers. It is organized so readers do not need to already be Android ROM experts to understand the baseline. The short version is this:
 
-- We took the Rabbit R1 hardware.
-- We installed CipherOS on the Rabbit R1 and documented the expected install and first-boot behavior.
-- We preserved the current RaBobster visual handoff, including Keyguard, workspace screenshots, and supplied icon artwork.
-- We removed the failed custom launcher from the active device and repo path.
-- We documented enough breadcrumbs that a person, or their own AI assistant, can rebuild the same baseline from public sources and repo-local assets.
+- Rabbit R1 hardware was brought up on CipherOS.
+- The expected install and first-boot behavior are documented.
+- The current RaBobster visual handoff is preserved, including Keyguard, workspace screenshots, and supplied icon artwork.
+- The failed custom launcher was removed from the active device and repo path.
+- The repository includes enough breadcrumbs for the same baseline to be rebuilt from public sources and repo-local assets.
 
-If you are new to this kind of work, start with [docs/RABOBSTER_REBUILD_GUIDE.md](docs/RABOBSTER_REBUILD_GUIDE.md). It explains the project in plain language and includes a copy/paste prompt you can give to your own AI coding assistant.
+Readers new to this kind of work should start with [docs/RABOBSTER_REBUILD_GUIDE.md](docs/RABOBSTER_REBUILD_GUIDE.md). It explains the project in plain language and includes a copy/paste prompt for an AI coding assistant.
 
 ## Current Baseline
 
@@ -34,7 +34,7 @@ If you are new to this kind of work, start with [docs/RABOBSTER_REBUILD_GUIDE.md
 
 Large generated flash artifacts under `artifacts/` are intentionally ignored. They can be regenerated from the build tree.
 
-Legacy CarrotOS harness screenshots were removed from the current tree so the repo visual evidence reflects the RaBobster build, not the pre-pivot recovery baseline.
+Legacy harness screenshots were removed from the current tree so the repo visual evidence reflects the RaBobster build.
 
 ## Visual Evidence
 
@@ -73,10 +73,10 @@ These steps reproduce the repo's public install/onboarding path. The fresh scree
 
 1. Get the official CipherOS Rabbit R1 package from <https://sourceforge.net/projects/cipheros/files/CipherOS-7/r1/>. Known-good R1 packages follow the pattern `CipherOS-7.0-ALHENA-cipher_r1-YYYYMMDD-HHMM-BETA-OFFICIAL-VANILLA.zip`.
 2. Read the release notes or flashing notes that come with the build. If upstream instructions differ from this README, follow upstream for the flash commands and partition list.
-3. Verify the download before flashing. Use checksums published beside the release when available, or record your own checksum immediately after download and before copying the file between machines.
+3. Verify the download before flashing. Use checksums published beside the release when available, or record a local checksum immediately after download and before copying the file between machines.
 4. Use the Rabbit R1 web flasher to place the device into bootloader/fastboot mode.
 5. Unlock the bootloader if needed. Expect a data wipe and an unlocked-device warning on later boots.
-6. Install CipherOS with the official fastboot/update flow for the package you downloaded.
+6. Install CipherOS with the official fastboot/update flow for the downloaded package.
 7. Let CipherOS complete first boot, then confirm the home handler is `com.android.launcher3/.CipherLauncher`.
 8. Apply the RaBobster handoff: set the Keyguard image from `docs/assets/brand/`, apply the supplied icon artwork from `docs/assets/icons/`, keep CipherLauncher as home, and verify side-button wake/lock behavior.
 9. Compare the device against `docs/assets/screenshots/`.
@@ -91,7 +91,7 @@ This repository is documentation, integration scaffolding, and visual evidence. 
 
 Do not publish private signing keys, account tokens, device identity files, NV partitions, private recovery dumps, or generated flash images in forks or issue reports.
 
-Some materials referenced by this repo come from third-party or vendor projects, including CipherOS, Rabbit R1 platform work, Android platform components, and contributed artwork. Keep their upstream license, attribution, and release-note requirements intact when you redistribute changes.
+Some materials referenced by this repo come from third-party or vendor projects, including CipherOS, Rabbit R1 platform work, Android platform components, and contributed artwork. Keep their upstream license, attribution, and release-note requirements intact when redistributing changes.
 
 ## Licensing And Provenance
 

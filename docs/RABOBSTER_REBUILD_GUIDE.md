@@ -2,7 +2,7 @@
 
 This guide is for people who want to recreate the RaBobster Rabbit R1 OS baseline from this repository. It is written for a mixed audience: students, new automation builders, people trying to break into AI work, and experienced Android developers who just want the facts without hunting through old notes.
 
-You can follow it yourself, or you can give it to your own AI coding assistant and ask that assistant to walk you through the process.
+This guide can be followed directly or used as context for an AI coding assistant.
 
 ## What This Project Is
 
@@ -153,7 +153,7 @@ Generated flash artifacts and private working notes are intentionally not part o
 
 ## Suggested AI Assistant Prompt
 
-If you are using your own AI assistant, start with this prompt:
+When using an AI assistant, start with this prompt:
 
 ```text
 You are helping me rebuild the RaBobster Rabbit R1 OS from this repository.
@@ -237,9 +237,9 @@ No. The public install path is the official CipherOS Android 16 Rabbit R1 releas
 
 No. After unlocking the Rabbit R1 bootloader, the device can warn that it is not trusted because it is unlocked. That warning is expected. Let it continue booting; it can still boot into CipherOS normally.
 
-### Are the old CarrotOS screenshots still the target?
+### Are the old harness screenshots still the target?
 
-No. The old CarrotOS-era screenshots were removed from the current tree because they described an earlier recovery baseline. The current target is the RaBobster evidence under `docs/assets/screenshots/`.
+No. The old harness screenshots were removed from the current tree because they described an earlier recovery baseline. The current target is the RaBobster evidence under `docs/assets/screenshots/`.
 
 ### Why are there no signing keys, generated images, or device identity files?
 

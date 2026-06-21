@@ -22,9 +22,9 @@ James Bubenik created the cute bunny image based on Rodney's original warrior Ra
 
 ## Source
 
-These files were captured from the current device on 2026-06-20 after Rodney flagged that the older screenshots showed the failed and unnecessary launcher.
+These files were captured from the current device on 2026-06-20 after the older screenshots were found to show the failed and unnecessary launcher.
 
-The old CarrotOS-era harness screenshots are intentionally not kept in the current tree because they no longer describe the reproducible RaBobster baseline.
+The old harness screenshots are intentionally not kept in the current tree because they no longer describe the reproducible RaBobster baseline.
 
 ## Inline Gallery
 
