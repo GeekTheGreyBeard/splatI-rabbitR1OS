@@ -6,6 +6,11 @@ The current set was freshly captured on 2026-06-20 from a Rabbit R1 running Ciph
 
 These images are not decorative. They are proof points for rebuilders. If your rebuilt device does not resemble these screens after following the handoff guide, treat that as a signal to stop and compare your build, launcher, overlay, and flash steps before continuing.
 
+See [../ASSET_PROVENANCE.md](../ASSET_PROVENANCE.md) for provenance and
+redistribution notes. These screenshots are repo-created captures, but they may
+show CipherOS/Android UI, third-party icons, product marks, and RaBobster
+artwork that remain under their respective owners' terms.
+
 James Bubenik created the cute bunny image based on Rodney's original warrior RaBobster image and concept: <https://github.com/jamesbubenik>.
 
 ## Included Files

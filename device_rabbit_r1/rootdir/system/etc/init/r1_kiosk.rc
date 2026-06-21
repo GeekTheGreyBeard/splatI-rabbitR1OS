@@ -31,8 +31,13 @@ on property:sys.boot_completed=1
     #   healthconnect.controller         ~12 MB — health data store, no
     #                                     health apps installed/installable.
     #   cellbroadcastreceiver.module     ~21 MB — emergency alerts (CMAS/WEA).
-    #                                     Never fires on a data-only IoT SIM,
-    #                                     no UI to display them in kiosk.
+    #                                     This is a kiosk tradeoff, not a
+    #                                     generic Android recommendation:
+    #                                     disabling it can suppress emergency
+    #                                     alert handling on builds/SIMs that
+    #                                     support WEA/CMAS. Keep enabled for
+    #                                     general-purpose, phone, or public
+    #                                     safety use.
     # We `pm disable` rather than remove the apex/apk because removing them
     # would break framework classpaths that import these modules' classes
     # (Keystore, Settings, etc). `pm disable` keeps classes loadable but
@@ -45,6 +50,10 @@ on property:sys.boot_completed=1
     exec u:r:su:s0 root root -- /system/bin/sh -c "pm disable com.android.rkpdapp; pm disable com.android.healthconnect.controller; pm disable com.android.cellbroadcastreceiver.module"
 
     # Lock all 8 CPU cores to performance governor.
+    # This favors visible launcher latency over thermals and battery life. It
+    # was chosen for the plugged-in RaBobster kiosk baseline; do not cargo-cult
+    # it into mobile/battery-sensitive builds without measuring heat, battery,
+    # and sustained performance.
     # R1 is always plugged in via USB — no battery cost. Default schedutil
     # ramps cores down on idle, then has to ramp back up on touch input,
     # costing 10-50ms of latency that shows up as missed VSync deadlines in

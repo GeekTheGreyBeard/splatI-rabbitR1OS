@@ -1,8 +1,34 @@
+# Local build/check artifacts
 /artifacts/
-/keys/
-*.keystore
+*.log
+build.log
+build-*.log
+
+# Android repo/build outputs
+.repo/
+out/
+**/out/
 *.apk
+*.apks
+*.aab
+*.idsig
+
+# Flash/image artifacts
 *.img
 *.bin
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.payload.bin
+*.super_empty.img
+*.vbmeta.img
+
+# Signing keys and private material
+/keys/
+**/keys/
+*.jks
+*.keystore
+*.pk8
 *.pem
 *.key

@@ -5,6 +5,10 @@
 # watches the raw key event and adds pocket-friendly behavior:
 #   - double tap: sleep/lock into Keyguard
 #   - long hold: forward hardware PTT broadcasts to the PatriciAI/OpenClaw app
+#
+# The long-hold path is intentionally coupled to ai.openclaw.app's
+# HardwarePttReceiver. Builds without that app keep double-tap lock behavior,
+# but long-hold PTT broadcasts have no receiver.
 
 service rabobster_side_button /system/bin/rabobster-side-button
     class late_start

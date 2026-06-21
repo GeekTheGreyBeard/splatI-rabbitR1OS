@@ -4,6 +4,11 @@ This directory contains the RaBobster icon artwork supplied for the Rabbit R1 ho
 
 The icons are repo assets, not an APK. They are intended to be applied to Cipher's existing Launcher3/CipherLauncher workspace and icon cache as part of the RaBobster visual baseline.
 
+See [../ASSET_PROVENANCE.md](../ASSET_PROVENANCE.md) for asset provenance,
+license boundaries, and redistribution cautions. Some icons may be generated,
+product-inspired, or logo-derived; do not assume every image here is covered by
+the top-level repository license.
+
 Included artwork:
 
 - `Rabobster.png` - original warrior RaBobster image.

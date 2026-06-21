@@ -11,6 +11,16 @@ fail=0
 ok()  { printf "  [OK]   %s\n" "$*"; }
 bad() { printf "  [FAIL] %s\n" "$*"; fail=$((fail+1)); }
 
+if [[ -z "$LINEAGE" || "$LINEAGE" == "/" || "$LINEAGE" == "$HOME" ]]; then
+  bad "LINEAGE points at an unsafe path: ${LINEAGE:-<empty>}"
+  echo "$fail regression(s) detected. Set LINEAGE to the Android repo checkout path."
+  exit 1
+fi
+
+if [[ ! -d "$LINEAGE/.repo" ]]; then
+  bad "$LINEAGE does not look like an Android repo checkout (.repo missing)"
+fi
+
 echo "== Device tree patches in $LINEAGE/device/rabbit/r1/ =="
 
 bc="$LINEAGE/device/rabbit/r1/BoardConfig.mk"

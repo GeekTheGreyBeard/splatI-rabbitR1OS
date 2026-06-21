@@ -19,7 +19,7 @@ If you are new to this kind of work, start with [docs/RABOBSTER_REBUILD_GUIDE.md
 - Target device: Rabbit R1
 - Verified live-device baseline: CipherOS 7.0 ALHENA / Android 16 on `cipher_r1`
 - Primary OS path: install the official CipherOS Rabbit R1 build, then apply the RaBobster handoff assets
-- Secondary build harness path: LineageOS 21 / Android 14 GSI path, retained as historical integration context
+- Historical/developer harness path: Android 15/Lineage-family source-build experiments, retained as integration context only
 - Home/workspace package: `com.android.launcher3/.CipherLauncher`
 - Removed launcher package: `io.splati.rabobster.launcher`
 - Side button behavior: single tap wakes, double tap locks into Keyguard, long hold remains available for PTT behavior
@@ -64,26 +64,48 @@ The cute bunny image was created by James Bubenik, based on Rodney's original wa
 
 More screenshots and contact sheets are documented in [docs/assets/screenshots/README.md](docs/assets/screenshots/README.md).
 
+Asset provenance and redistribution cautions are tracked in
+[docs/assets/ASSET_PROVENANCE.md](docs/assets/ASSET_PROVENANCE.md).
+
 ## Reproduction Summary
 
-These steps reproduce the repo's OS integration path. The fresh screenshots were captured from the current live Rabbit R1 on CipherOS Android 16 after the failed `io.splati.rabobster.launcher` package was removed.
+These steps reproduce the repo's public install/onboarding path. The fresh screenshots were captured from the current live Rabbit R1 on CipherOS Android 16 after the failed `io.splati.rabobster.launcher` package was removed.
 
-1. Get CipherOS for Rabbit R1 from the official CipherOS R1 release location: <https://sourceforge.net/projects/cipheros/files/CipherOS-7/r1/>.
-2. Use the Rabbit R1 web flasher to place the device into bootloader/fastboot mode.
-3. Unlock the bootloader if needed. This can wipe user data.
-4. Install or flash CipherOS using the CipherOS/R1 flashing instructions for the build you downloaded or produced.
-5. Expect the unlocked-bootloader warning on startup. It is safe to let the device continue; the warning does not mean the OS failed to boot.
-6. Let CipherOS complete first boot, then confirm the home handler is `com.android.launcher3/.CipherLauncher`.
-7. Apply the RaBobster visual assets from `docs/assets/brand/` and `docs/assets/icons/`.
-8. Compare the device against `docs/assets/screenshots/`.
+1. Get the official CipherOS Rabbit R1 package from <https://sourceforge.net/projects/cipheros/files/CipherOS-7/r1/>. Known-good R1 packages follow the pattern `CipherOS-7.0-ALHENA-cipher_r1-YYYYMMDD-HHMM-BETA-OFFICIAL-VANILLA.zip`.
+2. Read the release notes or flashing notes that come with the build. If upstream instructions differ from this README, follow upstream for the flash commands and partition list.
+3. Verify the download before flashing. Use checksums published beside the release when available, or record your own checksum immediately after download and before copying the file between machines.
+4. Use the Rabbit R1 web flasher to place the device into bootloader/fastboot mode.
+5. Unlock the bootloader if needed. Expect a data wipe and an unlocked-device warning on later boots.
+6. Install CipherOS with the official fastboot/update flow for the package you downloaded.
+7. Let CipherOS complete first boot, then confirm the home handler is `com.android.launcher3/.CipherLauncher`.
+8. Apply the RaBobster handoff: set the Keyguard image from `docs/assets/brand/`, apply the supplied icon artwork from `docs/assets/icons/`, keep CipherLauncher as home, and verify side-button wake/lock behavior.
+9. Compare the device against `docs/assets/screenshots/`.
 
 The current repo no longer includes or installs the discarded custom launcher APK.
+
+The older source-build harness is not the public install path. It remains useful for developers who need to inspect or rebuild integration pieces, but the public onboarding lane starts from the official CipherOS Android 16 Rabbit R1 release.
 
 ## Public Release Notes
 
 This repository is documentation, integration scaffolding, and visual evidence. It does not provide a ready-made RaBobster APK or a complete public ROM download. Use the official CipherOS Rabbit R1 release as the OS base.
 
 Do not publish private signing keys, account tokens, device identity files, NV partitions, private recovery dumps, or generated flash images in forks or issue reports.
+
+Some materials referenced by this repo come from third-party or vendor projects, including CipherOS, Rabbit R1 platform work, Android platform components, and contributed artwork. Keep their upstream license, attribution, and release-note requirements intact when you redistribute changes.
+
+## Licensing And Provenance
+
+Unless a file or notice states otherwise, original repository code,
+documentation, scripts, and configuration are licensed under the Apache License,
+Version 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+This repository does not grant rights to CipherOS, LineageOS, Android/AOSP,
+Rabbit R1, Rabbit Inc. marks, MediaTek components, vendor blobs, proprietary
+APKs or libraries, third-party logos, or logo-derived icons. Those materials
+remain under their upstream owners' terms. See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
+[docs/assets/ASSET_PROVENANCE.md](docs/assets/ASSET_PROVENANCE.md) before
+redistributing assets or generated device images.
 
 ## Useful Checks
 

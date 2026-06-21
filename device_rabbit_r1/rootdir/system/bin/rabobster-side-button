@@ -3,6 +3,9 @@ set -u
 
 ACTION_DOWN="ai.openclaw.app.action.HARDWARE_PTT_DOWN"
 ACTION_UP="ai.openclaw.app.action.HARDWARE_PTT_UP"
+# Hard-coded RaBobster/OpenClaw integration point. Long-press PTT only works
+# when this receiver exists on the installed app build; otherwise broadcasts
+# are logged and ignored by Android.
 COMPONENT="ai.openclaw.app/.HardwarePttReceiver"
 PIDFILE="/data/local/tmp/rabobster-side-button.pid"
 LOGFILE="/data/local/tmp/rabobster-side-button-events.log"

@@ -15,10 +15,41 @@
 
 set -euo pipefail
 
-LINEAGE="${LINEAGE:-/home/khalifa/lineage}"
-cd "$LINEAGE"
+LINEAGE="${LINEAGE:-$HOME/lineage}"
+DRY_RUN="${DRY_RUN:-0}"
+ASSUME_YES="${ASSUME_YES:-0}"
 
-say() { printf "  %s\n" "$*"; }
+confirm() {
+  local prompt="$1" reply
+  if [[ "$ASSUME_YES" == "1" ]]; then
+    return 0
+  fi
+  read -r -p "$prompt [y/N] " reply
+  [[ "$reply" =~ ^([yY]|[yY][eE][sS])$ ]]
+}
+
+die() {
+  printf 'ERROR: %s\n' "$*" >&2
+  exit 1
+}
+
+[[ -n "$LINEAGE" ]] || die "LINEAGE is empty"
+[[ "$LINEAGE" != "/" ]] || die "Refusing to use LINEAGE=/"
+[[ "$LINEAGE" != "$HOME" ]] || die "Refusing to use LINEAGE=$HOME"
+
+if [[ "$DRY_RUN" == "1" ]]; then
+  printf 'DRY_RUN: would edit Lineage product/config files under %s\n' "$LINEAGE"
+  exit 0
+fi
+
+[[ -d "$LINEAGE/.repo" ]] || die "$LINEAGE does not look like an Android repo checkout (.repo missing)"
+
+if ! confirm "Edit Lineage product/config files under $LINEAGE?"; then
+  printf 'Skipped Lineage slimming.\n'
+  exit 0
+fi
+
+cd "$LINEAGE"
 
 # perl with -0777 reads the whole file; multiline regex matches across newlines.
 # Each pattern targets the EXACT package list as Lineage/AOSP write it. If a

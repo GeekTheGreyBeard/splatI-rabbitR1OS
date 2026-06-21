@@ -1,0 +1,16 @@
+Splat-I Rabbit R1 OS
+
+Unless a file or notice states otherwise, original repository code,
+documentation, scripts, and configuration are licensed under the Apache
+License, Version 2.0.
+
+This repository is not the upstream owner of CipherOS, LineageOS, Android,
+the Android Open Source Project, Rabbit R1, Rabbit Inc. products or
+trademarks, MediaTek components, vendor firmware, proprietary APKs,
+proprietary libraries, or third-party logos and icons. References to those
+projects, products, and marks are descriptive and do not grant trademark or
+redistribution rights.
+
+Known upstream and third-party terms are summarized in
+THIRD_PARTY_NOTICES.md. Asset-specific provenance notes are kept in
+docs/assets/ASSET_PROVENANCE.md.

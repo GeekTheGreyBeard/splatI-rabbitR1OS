@@ -1,0 +1,36 @@
+name: Rebuild help
+description: Ask for help reproducing the public RaBobster Rabbit R1 baseline.
+title: "[Rebuild]: "
+labels:
+  - rebuild-help
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not upload credentials, signing keys, device IDs, private partitions, generated flash images, ROM zips, APKs, proprietary dumps, or screenshots containing personal data.
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Describe the rebuild step or device behavior you are working on.
+      placeholder: I installed CipherOS and am trying to apply the RaBobster handoff assets...
+    validations:
+      required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: Which path are you using?
+      options:
+        - Official CipherOS Rabbit R1 release
+        - Source-build harness experiment
+        - I am not sure
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence
+      description: Paste only redacted command output or brief notes. Do not include keys, partitions, serials, IDs, APKs, ROMs, or private dumps.
+      render: text
+    validations:
+      required: false
