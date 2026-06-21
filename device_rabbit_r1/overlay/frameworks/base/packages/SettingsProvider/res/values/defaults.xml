@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Silence boot/system audio cues for the R1 kiosk experience.
+
+  Symptom on build #14: a chirpy "bird whisper" sound played a couple of
+  seconds after the "Loading… · by legacy upstream" boot screen disappeared.
+  Root cause: keyguard always initializes locked at boot, even with
+  config_disableLockscreenByDefault=true. It then immediately unlocks,
+  and the unlock transition fires /product/media/audio/ui/Unlock.ogg
+  because def_lockscreen_sounds_enabled defaults to 1 in
+  frameworks/base/packages/SettingsProvider/res/values/defaults.xml.
+
+  These overlay values land in /data only on FIRST boot (when
+  Settings.System / Settings.Global tables are populated from defaults).
+  For users with existing /data, r1_kiosk.rc also runs `settings put`
+  on every sys.boot_completed=1 to flip these at runtime.
+-->
+<resources>
+    <integer name="def_lockscreen_sounds_enabled">0</integer>
+    <integer name="def_power_sounds_enabled">0</integer>
+    <integer name="def_dock_sounds_enabled">0</integer>
+</resources>

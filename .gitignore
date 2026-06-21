@@ -1,0 +1,8 @@
+/artifacts/
+/keys/
+*.keystore
+*.apk
+*.img
+*.bin
+*.pem
+*.key

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Defaults overlay for SettingsProvider. These values are written into
+  /data/system/users/.../system.xml the very first time SettingsProvider
+  initializes its DB (i.e. on first boot or after a userdata wipe).
+
+  The "whisper bird" chirp users hear ~10s after boot is `Unlock.ogg` —
+  KeyguardViewMediator briefly initializes locked, then immediately unlocks
+  (because config_disableLockscreenByDefault=true) and plays the unlock
+  sound on the way out. The init.rc `settings put` runs on
+  sys.boot_completed=1, which is AFTER that unlock — so it can't suppress
+  the first chime, only subsequent ones. Flipping the DEFAULT here makes
+  the very first DB write `lockscreen_sounds_enabled=0`, so keyguard
+  never even loads the sound file.
+
+  We also disable power sounds (low battery), sound effects (touch click,
+  key click) and charging sounds for the same reason — kiosk has no
+  audible UI.
+-->
+<resources>
+    <integer name="def_lockscreen_sounds_enabled">0</integer>
+    <integer name="def_power_sounds_enabled">0</integer>
+    <bool name="def_sound_effects_enabled">false</bool>
+    <bool name="def_charging_sounds_enabled">false</bool>
+</resources>

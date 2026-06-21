@@ -1,0 +1,17 @@
+# RaBobster side-button helper.
+#
+# The physical R1 side button remains mapped to BUTTON_1 so Android can wake
+# from it without treating every tap as a framework POWER press. This service
+# watches the raw key event and adds pocket-friendly behavior:
+#   - double tap: sleep/lock into Keyguard
+#   - long hold: forward hardware PTT broadcasts to the PatriciAI/OpenClaw app
+
+service rabobster_side_button /system/bin/rabobster-side-button
+    class late_start
+    user root
+    group root input shell
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1
+    start rabobster_side_button

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Force the system status bar to zero height. SystemUI still creates the
+  status bar window, but it's 0 pixels tall — no visible bar, no swipe-down
+  notification panel (the trigger area is 0px). Toasts, volume HUD, system
+  dialogs all still work because they live in separate windows.
+
+  Notification heads-up banners are suppressed independently in r1_kiosk.rc
+  (`heads_up_notifications_enabled=0`), so apps that try to surface
+  notifications via the status bar simply have no visible affordance.
+-->
+<resources>
+    <dimen name="status_bar_height_default">0dp</dimen>
+    <dimen name="status_bar_height_portrait">0dp</dimen>
+    <dimen name="status_bar_height_landscape">0dp</dimen>
+</resources>

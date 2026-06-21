@@ -1,0 +1,62 @@
+# R1 system property additions baked into /system/build.prop.
+# Why this file (and not PRODUCT_PROPERTY_OVERRIDES in device.mk)?
+# Modern AOSP filters PRODUCT_PROPERTY_OVERRIDES against an internal allowlist
+# and silently drops `qemu.*` overrides on non-emulator builds, so the
+# property never made it onto the device. system.prop is wired through
+# TARGET_SYSTEM_PROP in BoardConfig.mk and is appended verbatim into
+# /system/build.prop with no filtering.
+#
+# `qemu.hw.mainkeys=1` tells PhoneWindowManager that the device has hardware
+# nav keys (it doesn't, but lying about it is the canonical kiosk hack):
+# `mHasNavigationBar = false` is then set during boot and the SystemUI nav
+# bar window is never created at all (no draw → no swipe-up reveal possible).
+qemu.hw.mainkeys=1
+
+# Silence the boot-time notification chime (pixiedust.ogg).
+# The "USB debugging connected" notification fires before sys.boot_completed=1,
+# so r1_kiosk.rc's `settings put` runs too late to suppress the first sound.
+# Overriding ro.config.notification_sound to empty here means SettingsProvider's
+# DatabaseHelper writes "" as the default Settings.System.NOTIFICATION_SOUND when
+# /data is initialized — no default sound for any notification on first boot.
+# This is system.prop (not PRODUCT_PROPERTY_OVERRIDES) because GSI builds
+# silently filter overrides for some property prefixes — system.prop appends verbatim.
+ro.config.notification_sound=
+ro.config.alarm_alert=
+
+# Kill the ADB / USB-debugging notification entirely. UsbDeviceManager.java:1525
+# early-exits before posting the notification when this is "0", so neither the
+# icon nor the channel's notification chime ever fires. This is what was making
+# the post-boot chirp on userdebug builds — userdebug auto-enables ADB, the
+# notification posts within ~2s of boot_completed, and AOSP gives the
+# "DEVELOPER" channel its own URI even when the system default sound is empty.
+# Set as a property (not Settings.Secure adb_notify) because the property is
+# checked first and takes effect before SettingsProvider has finished init.
+persist.adb.notify=0
+
+# Kill the OTHER USB notification too — "Charging this device via USB" /
+# "Transferring files via USB". UsbDeviceManager.java:1358 (separate from
+# the ADB-active notification at line 1525) gates this on persist.charging.notify.
+# Build #15 fixed only persist.adb.notify and we still heard the chirp because
+# this second notification fires on the SystemNotificationChannels.USB channel,
+# which has its own per-channel sound URI that survives ro.config.notification_sound
+# being empty (channel sounds are set when the channel is registered, not
+# resolved at notify time from system defaults).
+persist.charging.notify=0
+
+# Default preferred network mode = 9 (NETWORK_MODE_LTE_GSM_WCDMA), NOT 10
+# (LTE_CDMA_EVDO_GSM_WCDMA). Vendor RIL libmtk-ril.so SEGV-crashes in
+# RmcCdmaBcRangeParser::getRange (null deref) when the framework asks it to
+# init the CDMA broadcast-config path on first boot — taking com.android.phone
+# down with it in a ~15s restart loop, no ITelephony / ISub binder service ever
+# registers, no data PDP comes up. Mode 9 skips CDMA codepath entirely.
+# Confirmed empirically post build #18 / clean userdata wipe (2026-04-29):
+# mode 10 → restart loop + mDataConnectionState stuck at 1 (CONNECTING);
+# mode 9 → mtkfusionrild stable, all binder services registered, LTE PDP
+# connects, ping over ccmni0 works.
+# Worldwide compat is not a concern in 2026: CDMA2000 was shut down by Verizon
+# (US 2022), KDDI (JP 2022), SKT/LGU+ (KR), China Telecom (~2025). Mode 9 still
+# covers LTE/VoLTE + WCDMA/HSPA + GSM/EDGE → ~all SIMs worldwide. 5G NR is on
+# separate mode bits, unaffected.
+# Format is comma-separated per-SIM-slot; R1 is single-SIM but ro.telephony
+# accepts multi-slot tuple, padded just in case.
+ro.telephony.default_network=9,9,9,9

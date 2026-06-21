@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  R1 kiosk-style defaults. The R1 ships with a bespoke launcher and no
+  Android lock screen / nav bar; these resource overrides match that
+  expectation in the framework so the device boots straight into the
+  launcher with no system chrome.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <bool name="config_disableLockscreenByDefault">true</bool>
+    <bool name="config_showNavigationBar">false</bool>
+    <!-- Replicates vendor/lineage/overlay/no-rro/.../config.xml. We filter that
+         overlay out in gsi_r1.mk because it also pins status_bar_height to 28dp;
+         keeping the light-sensor type override here avoids losing it. -->
+    <string name="config_displayLightSensorType" translatable="false">android.sensor.light</string>
+</resources>

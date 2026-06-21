@@ -1,0 +1,56 @@
+# Apply kiosk defaults as soon as system_server is up.
+# We do four things:
+#   1. policy_control immersive.full=*  — forces all app windows to receive
+#      immersive flags (auto-hide nav/status bars; user can still swipe to
+#      reveal them temporarily).
+#   2. cmd statusbar disable expand notification-icons notification-alerts
+#      home back recent  — disables the user-facing functions of the bars
+#      (no notification panel pulldown, no working back/home/recents button).
+#      The bars are still drawn but inert. NOTE: `cmd statusbar disable` was
+#      removed in Android 14 and is now a no-op; left here for documentation.
+#   3. settings put global heads_up_notifications_enabled 0  — no heads-up
+#      banners interrupting the launcher.
+#   4. Silence boot/system audio cues. Even with `config_disableLockscreenByDefault=true`,
+#      keyguard still initializes locked at boot then immediately unlocks; that
+#      transition fires Unlock.ogg (the "chirpy bird" sound users heard on build #14).
+#      We disable lockscreen sounds + power sounds + dock sounds + system sound
+#      effects (touch click, key click). This is the runtime fallback; the real
+#      fix lives in the SettingsProvider defaults overlay so first-flash users
+#      never even hear it once.
+# (1) + qemu.hw.mainkeys=1 in system.prop are the real "no nav bar" fix; (2)
+# is defense-in-depth in case the policy/property paths fail.
+on property:sys.boot_completed=1
+    exec u:r:su:s0 root root -- /system/bin/sh -c "settings put global policy_control immersive.full=*; cmd statusbar disable expand notification-icons notification-alerts home back recent; settings put global heads_up_notifications_enabled 0; settings put system lockscreen_sounds_enabled 0; settings put global power_sounds_enabled 0; settings put global dock_sounds_enabled 0; settings put system sound_effects_enabled 0; settings put global zen_mode 2; settings put secure adb_notify 0; settings put system notification_sound ''; settings put system volume_notification 0; settings put system volume_ring 0"
+    # Disable apps that run idle on a kiosk: ~46 MB combined PSS for zero
+    # functional value here.
+    #   rkpdapp                          ~13 MB — remote key provisioning
+    #                                     daemon. Widevine isn't provisioned
+    #                                     on R1 (the RkpdWidevine errors in
+    #                                     logcat confirm — it's actively
+    #                                     trying and failing).
+    #   healthconnect.controller         ~12 MB — health data store, no
+    #                                     health apps installed/installable.
+    #   cellbroadcastreceiver.module     ~21 MB — emergency alerts (CMAS/WEA).
+    #                                     Never fires on a data-only IoT SIM,
+    #                                     no UI to display them in kiosk.
+    # We `pm disable` rather than remove the apex/apk because removing them
+    # would break framework classpaths that import these modules' classes
+    # (Keystore, Settings, etc). `pm disable` keeps classes loadable but
+    # stops the app components, so RAM reclaims at next reboot.
+    #
+    # Note: com.android.devicelockcontroller would be a fourth candidate but
+    # is on AOSP's protected-packages list — PackageManagerService throws a
+    # SecurityException ("Cannot disable a protected package") and the
+    # disable silently fails. ~11 MB cost; left running.
+    exec u:r:su:s0 root root -- /system/bin/sh -c "pm disable com.android.rkpdapp; pm disable com.android.healthconnect.controller; pm disable com.android.cellbroadcastreceiver.module"
+
+    # Lock all 8 CPU cores to performance governor.
+    # R1 is always plugged in via USB — no battery cost. Default schedutil
+    # ramps cores down on idle, then has to ramp back up on touch input,
+    # costing 10-50ms of latency that shows up as missed VSync deadlines in
+    # the launcher's gfxinfo. Build #23 measurements: schedutil 50th-percentile
+    # frame time = 27ms (~30fps), 86% legacy-janky. Switching to performance
+    # dropped 50th to 16ms (hits 60Hz) and legacy-janky to 60% — 3x more
+    # frames meeting the deadline. cpu0-3 are the big cluster (2.2GHz max),
+    # cpu4-7 the little cluster (1.6GHz max); both pinned at their respective max.
+    exec u:r:su:s0 root root -- /system/bin/sh -c "for c in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo performance > $c; done"

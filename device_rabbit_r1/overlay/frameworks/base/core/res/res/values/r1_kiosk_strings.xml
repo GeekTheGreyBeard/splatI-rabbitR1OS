@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Replace the "Phone is starting…" boot transition text with a custom
+  loading screen. The boot message is rendered by PhoneWindowManager via
+  showBootMessage() which calls Resources.getText() — that returns a
+  Spanned for inline-styled strings, so <small>…</small> markup actually
+  shrinks the credit line at runtime. Empty strings on the upgrade /
+  optimization variants suppress the transient OTA-style messages.
+
+  Upstream defines these strings with product= variants (default, tablet,
+  automotive, device); AAPT errors with "multiple default products" if the
+  overlay doesn't match each variant — so we override every one.
+-->
+<resources>
+    <string name="android_start_title" product="default">RaBobster r1</string>
+    <string name="android_start_title" product="tablet">RaBobster r1</string>
+    <string name="android_start_title" product="automotive">RaBobster r1</string>
+    <string name="android_start_title" product="device">RaBobster r1</string>
+
+    <string name="android_upgrading_title" product="default">RaBobster r1</string>
+    <string name="android_upgrading_title" product="tablet">RaBobster r1</string>
+    <string name="android_upgrading_title" product="device">RaBobster r1</string>
+
+    <string name="android_upgrading_apk"></string>
+    <string name="android_upgrading_starting_apps"></string>
+    <string name="android_upgrading_complete"></string>
+    <string name="android_upgrading_optimizing_apps"></string>
+</resources>
