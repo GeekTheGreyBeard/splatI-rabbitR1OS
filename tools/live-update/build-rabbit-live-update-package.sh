@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-OUT_DIR="${RABOBSTER_LIVE_UPDATE_OUT:-/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbitR1OS/liveUpdates}"
+OUT_DIR="${RABOBSTER_LIVE_UPDATE_OUT:-$ROOT_DIR/artifacts/liveUpdates}"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 WORK_DIR="$(mktemp -d)"
 
@@ -33,7 +33,7 @@ Options:
   --min-fingerprint VALUE
                         Minimum supported build fingerprint. Defaults to any.
   --signing-key PATH    Optional private key for openssl detached checksum signature.
-  --out-dir PATH        Artifact directory. Defaults to GTGB-Files OpenClaw artifacts.
+  --out-dir PATH        Artifact directory. Defaults to repo-local artifacts/liveUpdates.
   -h, --help            Show this help.
 USAGE
 }

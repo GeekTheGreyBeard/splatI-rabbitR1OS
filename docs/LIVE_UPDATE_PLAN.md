@@ -53,7 +53,7 @@ Build a package:
 
 ```bash
 tools/live-update/build-rabbit-live-update-package.sh \
-  --openclaw-apk /run/media/gtgb/GTGB-Files/Projects/openclawAndroid-staging/apps/android/app/build/outputs/apk/thirdParty/debug/openclaw-2026.6.9-thirdParty-debug.apk
+  --openclaw-apk "$OPENCLAW_ANDROID_APK"
 ```
 
 Deploy in data-preserving runtime mode:
@@ -61,10 +61,10 @@ Deploy in data-preserving runtime mode:
 ```bash
 tools/live-update/deploy-rabbit-live-update.sh \
   --serial 919109A4J1600110804E \
-  --package /run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbitR1OS/liveUpdates/<package>.tar.gz
+  --package "$RABOBSTER_LIVE_UPDATE_OUT/<package>.tar.gz"
 ```
 
-Runtime mode installs APK payloads with `pm install -r`, places the current side-button lock and boot-warm scripts under `/data/local/tmp`, attempts to start the temporary side-button watcher, records whether that watcher remains running, runs boot warm, and captures evidence under `/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbitR1OS/liveUpdates/evidence/`.
+Runtime mode installs APK payloads with `pm install -r`, places the current side-button lock and boot-warm scripts under `/data/local/tmp`, attempts to start the temporary side-button watcher, records whether that watcher remains running, runs boot warm, and captures evidence under `$RABOBSTER_LIVE_UPDATE_EVIDENCE`.
 
 When a production/system write is desired, add `--apply-system`. That mode attempts `adb remount` and copies the same scripts and init file into `/system`. It still applies runtime mode first, so a system-space failure does not prevent live validation.
 
@@ -94,7 +94,7 @@ human-readable release summary before promotion:
 
 ```bash
 tools/live-update/summarize-live-update-evidence.sh \
-  /run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbitR1OS/liveUpdates/evidence/<stamp>-<serial>
+  "$RABOBSTER_LIVE_UPDATE_EVIDENCE/<stamp>-<serial>"
 ```
 
 ## Long-Term A/B OTA Lane

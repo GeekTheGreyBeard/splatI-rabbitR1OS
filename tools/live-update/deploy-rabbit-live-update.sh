@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ADB="${ADB:-/run/media/gtgb/GTGB-Files/Developer/android-sdk/platform-tools/adb}"
+ADB="${ADB:-adb}"
 SERIAL="${ANDROID_SERIAL:-}"
 PACKAGE=""
 APPLY_SYSTEM=false
-EVIDENCE_ROOT="${RABOBSTER_LIVE_UPDATE_EVIDENCE:-/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbitR1OS/liveUpdates/evidence}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+EVIDENCE_ROOT="${RABOBSTER_LIVE_UPDATE_EVIDENCE:-$ROOT_DIR/artifacts/liveUpdates/evidence}"
 REMOTE_ROOT="/data/local/tmp/rabobster-live-update"
 FORCE_FINGERPRINT=false
 ALLOW_UNSIGNED_PRODUCTION=false
@@ -28,7 +30,7 @@ Options:
                      Allow unsigned non-staging packages. Requires operator intent.
   --verify-key PATH  OpenSSL public key used to verify SHA256SUMS.sig.
                      Defaults to RABOBSTER_LIVE_UPDATE_VERIFY_KEY.
-  --evidence PATH    Evidence directory root. Defaults to GTGB-Files OpenClaw artifacts.
+  --evidence PATH    Evidence directory root. Defaults to repo-local artifacts/liveUpdates/evidence.
   -h, --help         Show this help.
 USAGE
 }

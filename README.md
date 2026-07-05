@@ -115,5 +115,3 @@ rg -n --hidden --glob '!.git/**' --glob '!*.png' --glob '!*.jpg' --glob '!*.zip'
 ```
 
 ## Internal Documentation
-
-Obsidian documentation: `OpenClaw/Projects/rabbitR1OS-staging/`

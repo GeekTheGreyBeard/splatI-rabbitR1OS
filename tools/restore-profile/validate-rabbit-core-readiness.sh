@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ADB="${ADB:-/run/media/gtgb/GTGB-Files/Developer/android-sdk/platform-tools/adb}"
+ADB="${ADB:-adb}"
 SERIAL="${ANDROID_SERIAL:-}"
-OUT_ROOT="${RABOBSTER_CORE_READINESS_OUT:-/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbit/coreReadiness}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+OUT_ROOT="${RABOBSTER_CORE_READINESS_OUT:-$ROOT_DIR/artifacts/coreReadiness}"
 
 usage() {
   cat <<'USAGE'
@@ -13,7 +15,7 @@ Validate post-flash Rabbit/OpenClaw core device readiness.
 
 Options:
   --serial SERIAL    ADB serial. Defaults to ANDROID_SERIAL or the single device.
-  --out-root PATH    Artifact root. Defaults to GTGB-Files OpenClaw artifacts.
+  --out-root PATH    Artifact root. Defaults to repo-local artifacts/coreReadiness.
   -h, --help         Show this help.
 USAGE
 }

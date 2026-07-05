@@ -37,7 +37,7 @@ Required human-auth readiness:
 
 Prior restore source:
 
-`/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbit/r1RestoreAfterBootAnimationFlash-20260621T0950/`
+`$RABOBSTER_RESTORE_SOURCE/r1RestoreAfterBootAnimationFlash-20260621T0950/`
 
 Important reusable artifacts:
 
@@ -47,7 +47,7 @@ Important reusable artifacts:
   - `apks/org.mozilla.fennec_fdroid_1520020.apk`
   - `apks/patriciai-2026.6.2-thirdParty-debug.apk`
 - Spotify APK source:
-  - `/run/media/gtgb/GTGB-Files/OpenClaw/tools/android/spotify/spotify-9.1.58.1567.apk`
+  - `$RABOBSTER_APK_ARCHIVE/spotify-9.1.58.1567.apk`
 - Launcher/icon databases:
   - `db/launcher_3_by_3.restored.db`
   - `db/app_icons.restored.db`
@@ -61,9 +61,9 @@ Important reusable artifacts:
 
 Additional icon/layout artifacts:
 
-- `/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbit/cipherCustomIcons-20260620T133139-0600/`
-- `/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbit/cipherWorkspaceUpdate-20260620T134153-0600/`
-- `/run/media/gtgb/GTGB-Files/OpenClaw/artifacts/rabbit/cipherOmiIcon-20260620T1506-0600/`
+- `$RABOBSTER_ARTIFACTS/cipherCustomIcons-20260620T133139-0600/`
+- `$RABOBSTER_ARTIFACTS/cipherWorkspaceUpdate-20260620T134153-0600/`
+- `$RABOBSTER_ARTIFACTS/cipherOmiIcon-20260620T1506-0600/`
 
 ## Pre-Flash Capture
 
