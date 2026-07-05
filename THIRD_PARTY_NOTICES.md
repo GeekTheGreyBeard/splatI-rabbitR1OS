@@ -55,8 +55,7 @@ generated flash images unless you have the rights to do so.
 
 `device_rabbit_r1/bootanimation/` contains boot animation archive files in
 the working tree. The active `bootanimation.zip` is a 480x480 PatriciAI logo
-animation generated from the PatriciAI web interface logo asset at
-`/run/media/gtgb/GTGB-Files/Projects/RASiTechnical/patriciAI/patriciAIWebInterface/deploy/assets/patriciai-logo.png`.
+animation generated from an internal PatriciAI web interface logo asset.
 The older backup archives in that folder predate this replacement and remain
 conservative use / pending confirmation unless a later notice documents clearer
 rights.
