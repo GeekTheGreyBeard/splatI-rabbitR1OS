@@ -63,7 +63,7 @@ After CipherOS is running, this repository's RaBobster work begins. This is a ha
 2. Apply `docs/assets/brand/cute-rabobster-lockscreen-480x640.png` as the Keyguard/lockscreen image using the available CipherOS/Android wallpaper controls for the device.
 3. Apply the supplied icon artwork from `docs/assets/icons/` to the Cipher workspace and icon cache through CipherLauncher or Android shortcut customization. Do not install `io.splati.rabobster.launcher`.
 4. Preserve Android system access. Quick Settings and Settings should remain reachable after the visual handoff.
-5. Verify side-button behavior on the device: single tap wakes to Keyguard, double tap locks for pocket carry, and long hold remains available for PTT behavior.
+5. Verify side-button behavior on the device: single tap wakes to Keyguard and double tap locks for pocket carry. Hardware PTT is intentionally out of scope because OpenClaw Realtime Talk does not require it.
 6. Compare the device against the screenshots in this guide and `docs/assets/screenshots/`.
 
 ## What You Should See When It Works
@@ -161,7 +161,7 @@ You are helping me rebuild the RaBobster Rabbit R1 OS from this repository.
 Read README.md first, then docs/RABOBSTER_REBUILD_GUIDE.md, then inspect the harness scripts and device_rabbit_r1 folder. Treat this as an Android OS integration project, not a normal Android app.
 
 Goal:
-Reproduce the RaBobster Rabbit R1 OS baseline shown in docs/assets/screenshots. The expected result is a Rabbit R1 that does not carry the failed io.splati.rabobster.launcher package, shows the RaBobster Keyguard artwork, uses the Cipher home/workspace surface, keeps Android system surfaces reachable, and supports side-button behavior where single tap wakes, double tap locks, and long hold remains available for PTT.
+Reproduce the RaBobster Rabbit R1 OS baseline shown in docs/assets/screenshots. The expected result is a Rabbit R1 that does not carry the failed io.splati.rabobster.launcher package, shows the RaBobster Keyguard artwork, uses the Cipher home/workspace surface, keeps Android system surfaces reachable, and supports side-button behavior where single tap wakes and double tap locks. Hardware PTT is intentionally out of scope.
 
 Constraints:
 - Do not invent missing signing keys or device files.
@@ -206,13 +206,12 @@ After the device boots:
 6. Confirm the side button behavior:
    - Single tap wakes to Keyguard.
    - Double tap locks the screen.
-   - Long hold is still available for PTT behavior when the installed app provides `ai.openclaw.app/.HardwarePttReceiver`.
 7. Confirm the lockscreen image matches the RaBobster lockscreen evidence.
 8. Confirm the supplied icon artwork appears on the Cipher workspace.
 
 ## Side Button And Kiosk Tradeoffs
 
-The side-button helper is intentionally small and device-specific. Double tap locks through Android input, while long hold sends hard-coded OpenClaw/PTT broadcasts to `ai.openclaw.app/.HardwarePttReceiver`. If your build does not ship that receiver, double tap still works but long-hold PTT has no consumer.
+The side-button helper is intentionally small and device-specific. Double tap locks through Android input. Hardware PTT is not included in this build target because OpenClaw Realtime Talk is the required voice experience and does not depend on a button bridge.
 
 The kiosk init file also makes two deliberate tradeoffs for the RaBobster baseline:
 

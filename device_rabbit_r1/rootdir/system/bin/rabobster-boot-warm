@@ -1,0 +1,49 @@
+#!/system/bin/sh
+set -u
+
+LOGFILE="/data/local/tmp/rabobster-boot-warm.log"
+OPENCLAW_PACKAGE="ai.openclaw.app"
+OPENCLAW_ACTIVITY="ai.openclaw.app/.MainActivity"
+TAILSCALE_PACKAGE="com.tailscale.ipn"
+TAILSCALE_CONNECT="com.tailscale.ipn.CONNECT_VPN"
+TAILSCALE_RECEIVER="com.tailscale.ipn/.IPNReceiver"
+
+log() {
+  echo "$(date '+%F %T') $*" >> "$LOGFILE"
+}
+
+wait_for_package() {
+  package="$1"
+  tries=0
+  while [ "$tries" -lt 30 ]; do
+    if pm path "$package" >/dev/null 2>&1; then
+      return 0
+    fi
+    tries=$((tries + 1))
+    sleep 1
+  done
+  return 1
+}
+
+log "boot warm started"
+
+if wait_for_package "$TAILSCALE_PACKAGE"; then
+  am broadcast -a "$TAILSCALE_CONNECT" -n "$TAILSCALE_RECEIVER" >/dev/null 2>&1 \
+    && log "tailscale connect broadcast sent" \
+    || log "tailscale connect broadcast failed"
+else
+  log "tailscale package not available"
+fi
+
+if wait_for_package "$OPENCLAW_PACKAGE"; then
+  am start -n "$OPENCLAW_ACTIVITY" --activity-single-top --activity-clear-top >/dev/null 2>&1 \
+    && log "openclaw activity launched" \
+    || log "openclaw activity launch failed"
+  am start-foreground-service "$OPENCLAW_PACKAGE/.NodeForegroundService" >/dev/null 2>&1 \
+    && log "openclaw foreground service started" \
+    || log "openclaw foreground service start failed"
+else
+  log "openclaw package not available"
+fi
+
+log "boot warm finished"

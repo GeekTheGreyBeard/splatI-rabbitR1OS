@@ -4,11 +4,8 @@
 # from it without treating every tap as a framework POWER press. This service
 # watches the raw key event and adds pocket-friendly behavior:
 #   - double tap: sleep/lock into Keyguard
-#   - long hold: forward hardware PTT broadcasts to the PatriciAI/OpenClaw app
-#
-# The long-hold path is intentionally coupled to ai.openclaw.app's
-# HardwarePttReceiver. Builds without that app keep double-tap lock behavior,
-# but long-hold PTT broadcasts have no receiver.
+# OpenClaw Realtime Talk is the required voice feature and does not depend on
+# this button helper.
 
 service rabobster_side_button /system/bin/rabobster-side-button
     class late_start
@@ -17,5 +14,21 @@ service rabobster_side_button /system/bin/rabobster-side-button
     oneshot
     disabled
 
+service rabobster_boot_warm /system/bin/rabobster-boot-warm
+    class late_start
+    user root
+    group root shell
+    oneshot
+    disabled
+
+service rabobster_live_update /system/bin/rabobster-live-update
+    class late_start
+    user root
+    group root shell
+    oneshot
+    disabled
+
 on property:sys.boot_completed=1
+    start rabobster_live_update
+    start rabobster_boot_warm
     start rabobster_side_button

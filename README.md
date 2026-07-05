@@ -22,7 +22,7 @@ Readers new to this kind of work should start with [docs/RABOBSTER_REBUILD_GUIDE
 - Historical/developer harness path: Android 15/Lineage-family source-build experiments, retained as integration context only
 - Home/workspace package: `com.android.launcher3/.CipherLauncher`
 - Removed launcher package: `io.splati.rabobster.launcher`
-- Side button behavior: single tap wakes, double tap locks into Keyguard, long hold remains available for PTT behavior
+- Side button behavior: single tap wakes, double tap locks into Keyguard; hardware PTT is intentionally out of scope
 
 ## Repository Contents
 
@@ -113,3 +113,7 @@ redistributing assets or generated device images.
 git status --short --branch
 rg -n --hidden --glob '!.git/**' --glob '!*.png' --glob '!*.jpg' --glob '!*.zip' --glob '!*.apk' --glob '!*.img' -i '(api[_-]?key|secret|token|password|authorization:|bearer |-----BEGIN (RSA|OPENSSH|PRIVATE)|ghp_|github_pat_|sk-)' .
 ```
+
+## Internal Documentation
+
+Obsidian documentation: `OpenClaw/Projects/rabbitR1OS-staging/`

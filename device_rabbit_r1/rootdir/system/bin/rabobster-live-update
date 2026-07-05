@@ -1,0 +1,38 @@
+#!/system/bin/sh
+set -u
+
+ROOT="/system/etc/rabobster-live-update"
+LOGFILE="/data/local/tmp/rabobster-live-update.log"
+OPENCLAW_APK="$ROOT/openclaw.apk"
+TAILSCALE_APK="$ROOT/tailscale.apk"
+
+log() {
+  echo "$(date '+%F %T') $*" >> "$LOGFILE"
+}
+
+install_apk() {
+  label="$1"
+  apk="$2"
+  if [ ! -f "$apk" ]; then
+    log "$label apk not present: $apk"
+    return 0
+  fi
+
+  pm install -r "$apk" >> "$LOGFILE" 2>&1 \
+    && log "$label apk installed" \
+    || log "$label apk install failed"
+}
+
+log "live update started"
+
+if [ -f "$ROOT/manifest.properties" ]; then
+  log "manifest:"
+  sed 's/^/  /' "$ROOT/manifest.properties" >> "$LOGFILE" 2>&1 || true
+else
+  log "manifest not present"
+fi
+
+install_apk "openclaw" "$OPENCLAW_APK"
+install_apk "tailscale" "$TAILSCALE_APK"
+
+log "live update finished"

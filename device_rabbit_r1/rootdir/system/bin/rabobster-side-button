@@ -1,17 +1,8 @@
 #!/system/bin/sh
 set -u
 
-ACTION_DOWN="ai.openclaw.app.action.HARDWARE_PTT_DOWN"
-ACTION_UP="ai.openclaw.app.action.HARDWARE_PTT_UP"
-# Hard-coded RaBobster/OpenClaw integration point. Long-press PTT only works
-# when this receiver exists on the installed app build; otherwise broadcasts
-# are logged and ignored by Android.
-COMPONENT="ai.openclaw.app/.HardwarePttReceiver"
 PIDFILE="/data/local/tmp/rabobster-side-button.pid"
 LOGFILE="/data/local/tmp/rabobster-side-button-events.log"
-DOWNFILE="/data/local/tmp/rabobster-side-button.down"
-ACTIVEFILE="/data/local/tmp/rabobster-side-button.ptt-active"
-TIMERFILE="/data/local/tmp/rabobster-side-button.timer"
 LASTTAPFILE="/data/local/tmp/rabobster-side-button.lasttap"
 
 DOUBLE_MS=500
@@ -28,38 +19,9 @@ is_awake() {
   dumpsys power 2>/dev/null | grep -q 'mWakefulness=Awake'
 }
 
-send_ptt() {
-  action="$1"
-  event="$2"
-  am broadcast -a "$action" -n "$COMPONENT" >/dev/null 2>&1
-  log "$action $event"
-}
-
-cancel_timer() {
-  if [ -f "$TIMERFILE" ]; then
-    timer_pid="$(cat "$TIMERFILE" 2>/dev/null || true)"
-    if [ -n "${timer_pid:-}" ]; then
-      kill "$timer_pid" >/dev/null 2>&1 || true
-    fi
-    rm -f "$TIMERFILE"
-  fi
-}
-
 lock_now() {
   log "double tap lock: input keyevent POWER"
   input keyevent 26 >/dev/null 2>&1
-}
-
-start_long_timer() {
-  event="$1"
-  (
-    sleep 0.55
-    if [ -f "$DOWNFILE" ] && [ ! -f "$ACTIVEFILE" ]; then
-      echo 1 > "$ACTIVEFILE"
-      send_ptt "$ACTION_DOWN" "$event long"
-    fi
-  ) &
-  echo "$!" > "$TIMERFILE"
 }
 
 handle_short_tap() {
@@ -80,8 +42,8 @@ handle_short_tap() {
 }
 
 echo "$$" > "$PIDFILE"
-rm -f "$DOWNFILE" "$ACTIVEFILE" "$TIMERFILE" "$LASTTAPFILE"
-log "rabobster side-button watcher started: double tap locks, long hold PTT"
+rm -f "$LASTTAPFILE"
+log "rabobster side-button watcher started: double tap locks"
 
 getevent -l 2>>"$LOGFILE" | while read -r device ev_type key state rest; do
   case "$device" in
@@ -92,19 +54,8 @@ getevent -l 2>>"$LOGFILE" | while read -r device ev_type key state rest; do
   [ "$ev_type" = "EV_KEY" ] || continue
 
   case "$key:$state" in
-    KEY_POWER:DOWN|KEY_VOICECOMMAND:DOWN|KEY_PLAYPAUSE:DOWN)
-      echo 1 > "$DOWNFILE"
-      start_long_timer "$device $key $state"
-      ;;
     KEY_POWER:UP|KEY_VOICECOMMAND:UP|KEY_PLAYPAUSE:UP)
-      rm -f "$DOWNFILE"
-      cancel_timer
-      if [ -f "$ACTIVEFILE" ]; then
-        rm -f "$ACTIVEFILE"
-        send_ptt "$ACTION_UP" "$device $key $state"
-      else
-        handle_short_tap
-      fi
+      handle_short_tap
       ;;
   esac
 done

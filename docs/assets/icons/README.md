@@ -26,6 +26,7 @@ Included artwork:
 - `openclaw.png`
 - `phone.png`
 - `settings.png`
+- `spotify.png`
 - `tailscale.png`
 - `terminal.png`
 - `weather.png`

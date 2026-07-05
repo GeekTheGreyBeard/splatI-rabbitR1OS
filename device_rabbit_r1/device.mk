@@ -9,14 +9,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     $(LOCAL_PATH)/rootdir/system/etc/init/r1_kiosk.rc:system/etc/init/r1_kiosk.rc \
     $(LOCAL_PATH)/rootdir/system/etc/init/r1_side_button.rc:system/etc/init/r1_side_button.rc \
+    $(LOCAL_PATH)/rootdir/system/etc/rabobster-live-update/manifest.properties:system/etc/rabobster-live-update/manifest.properties \
+    $(LOCAL_PATH)/rootdir/system/bin/rabobster-live-update:system/bin/rabobster-live-update \
     $(LOCAL_PATH)/rootdir/system/bin/rabobster-side-button:system/bin/rabobster-side-button \
+    $(LOCAL_PATH)/rootdir/system/bin/rabobster-boot-warm:system/bin/rabobster-boot-warm \
     device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
 
 # Keylayout
 # Side button: remap KEY_POWER (116) to BUTTON_1 so the device can handle
-# wake/lock/PTT behavior without forcing the retired custom launcher into the
-# image. BUTTON_1 has no framework handling, so downstream handlers can observe
-# raw DOWN/UP timing without PhoneWindowManager consuming the event as POWER.
+# wake/lock behavior without forcing the retired custom launcher into the image.
+# BUTTON_1 has no framework handling, so downstream handlers can observe raw
+# DOWN/UP timing without PhoneWindowManager consuming the event as POWER.
 # A name-specific .kl in /system/usr/keylayout/ wins over Generic.kl during EventHub
 # search, so this overrides the stock POWER mapping without editing Generic.kl.
 PRODUCT_COPY_FILES += \
