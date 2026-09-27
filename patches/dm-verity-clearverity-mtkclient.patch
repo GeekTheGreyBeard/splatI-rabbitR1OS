@@ -1,0 +1,53 @@
+diff --git a/mtk.py b/mtk.py
+index 49cd29d..d018328 100755
+--- a/mtk.py
++++ b/mtk.py
+@@ -312,7 +312,7 @@ def main():
+     da_poke.add_argument('data', type=str, help="Data to write")
+ 
+     da_unlock = da_subs.add_parser("seccfg", parents=[base], help="Unlock device / Configure seccfg")
+-    da_unlock.add_argument('flag', type=str, help="Needed flag (unlock,lock)")
++    da_unlock.add_argument('flag', type=str, help="Needed flag (unlock,lock,clearverity)")
+     da_unlock.add_argument('--critical', action="store_true", default=False,
+                            help="Retain legacy V4 behavior by updating the dm-verity state")
+ 
+diff --git a/mtkclient/Library/DA/xflash/extension/xflash.py b/mtkclient/Library/DA/xflash/extension/xflash.py
+index 1e845dd..caf8d7a 100644
+--- a/mtkclient/Library/DA/xflash/extension/xflash.py
++++ b/mtkclient/Library/DA/xflash/extension/xflash.py
+@@ -779,8 +779,8 @@ class XFlashExt(metaclass=LogBase):
+         return HwCrypto(setup, self.loglevel, self.config.gui)
+ 
+     def seccfg(self, lockflag, critical=False):
+-        if lockflag not in ["unlock", "lock"]:
+-            return False, "Valid flags are: unlock, lock"
++        if lockflag not in ["unlock", "lock", "clearverity"]:
++            return False, "Valid flags are: unlock, lock, clearverity"
+         data, guid_gpt = self.xflash.partition.get_gpt(self.mtk.config.gpt_settings, "user")
+         seccfg_data = None
+         partition = None
+@@ -822,6 +822,8 @@ class XFlashExt(metaclass=LogBase):
+         if isinstance(sc_org, SecCfgV4):
+             ret, writedata = sc_org.create(lockflag=lockflag, critical=critical)
+         else:
++            if lockflag == "clearverity":
++                return False, "clearverity is supported only for V4 seccfg"
+             ret, writedata = sc_org.create(lockflag=lockflag)
+         if ret is False:
+             return False, writedata
+diff --git a/mtkclient/Library/Hardware/seccfg.py b/mtkclient/Library/Hardware/seccfg.py
+index 7763ca1..f230369 100644
+--- a/mtkclient/Library/Hardware/seccfg.py
++++ b/mtkclient/Library/Hardware/seccfg.py
+@@ -147,6 +147,11 @@ class SecCfgV4(metaclass=LogBase):
+             self.lock_state = 1
+             if critical:
+                 self.dm_verity_state = 0
++        elif lockflag == "clearverity":
++            # Keep the current lock state and clear only the persistent
++            # dm-verity corruption marker. The authenticated hash below is
++            # regenerated using this device's own SEJ hardware key.
++            self.dm_verity_state = 0
+         seccfg_data = pack("<IIIIIII", self.magic, self.seccfg_ver, self.seccfg_size, self.lock_state,
+                            self.dm_verity_state, self.sboot_runtime, 0x45454545)
+         dec_hash = hashlib.sha256(seccfg_data).digest()
